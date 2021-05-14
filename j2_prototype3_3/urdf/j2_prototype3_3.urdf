@@ -1,395 +1,287 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
      Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
-<robot
-  name="j2_prototype3_3">
-  <link
-    name="base_link">
-    <inertial>
-      <origin
-        xyz="0.11384 -2.3403E-16 -0.12252"
-        rpy="0 0 0" />
-      <mass
-        value="2.0493" />
-      <inertia
-        ixx="0.0053384"
-        ixy="-1.1944E-18"
-        ixz="-0.00016771"
-        iyy="0.013602"
-        iyz="6.7032E-18"
-        izz="0.017691" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://j2_prototype3_3/meshes/base_link.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.79216 0.81961 0.93333 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://j2_prototype3_3/meshes/base_link.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <link
-    name="Link_0">
-    <inertial>
-      <origin
-        xyz="1.61827309052782E-05 -0.0123497742427197 0.117149116597007"
-        rpy="0 0 0" />
-      <mass
-        value="0.884810555483961" />
-      <inertia
-        ixx="0.00158081710341373"
-        ixy="1.65019256946575E-07"
-        ixz="6.93858360117018E-07"
-        iyy="0.00169495951809545"
-        iyz="-3.6460561615554E-06"
-        izz="0.00141716407449672" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://j2_prototype3_3/meshes/Link_0.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://j2_prototype3_3/meshes/Link_0.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="Base_Rotate"
-    type="revolute">
-    <origin
-      xyz="0.0483 0 -0.1263"
-      rpy="0 0 -1.5708" />
-    <parent
-      link="base_link" />
-    <child
-      link="Link_0" />
-    <axis
-      xyz="0 0 1" />
-    <limit
-      lower="-3.14"
-      upper="3.14"
-      effort="0"
-      velocity="0" />
-  </joint>
-  <link
-    name="Link_1">
-    <inertial>
-      <origin
-        xyz="0.0857819637518 0.00580822512338841 0.150560483479643"
-        rpy="0 0 0" />
-      <mass
-        value="1.65666298237923" />
-      <inertia
-        ixx="0.00776893592809935"
-        ixy="-3.83296066990928E-06"
-        ixz="-6.56645197721605E-06"
-        iyy="0.00737009929368987"
-        iyz="2.10121053232552E-06"
-        izz="0.00233759453730666" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://j2_prototype3_3/meshes/Link_1.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://j2_prototype3_3/meshes/Link_1.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="Limb_1"
-    type="revolute">
-    <origin
-      xyz="0 -0.0382999999999991 0.126300000762939"
-      rpy="0 0 1.5707963267949" />
-    <parent
-      link="Link_0" />
-    <child
-      link="Link_1" />
-    <axis
-      xyz="-1 0 0" />
-    <limit
-      lower="-1.57"
-      upper="1.57"
-      effort="0"
-      velocity="0" />
-  </joint>
-  <link
-    name="Link_2">
-    <inertial>
-      <origin
-        xyz="0.0877819571500387 0.00580822512338794 0.150560483479643"
-        rpy="0 0 0" />
-      <mass
-        value="1.65666298237922" />
-      <inertia
-        ixx="0.00776893592809933"
-        ixy="-3.83296066990485E-06"
-        ixz="-6.56645197728899E-06"
-        iyy="0.00737009929368986"
-        iyz="2.1012105323528E-06"
-        izz="0.00233759453730663" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://j2_prototype3_3/meshes/Link_2.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://j2_prototype3_3/meshes/Link_2.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="Limb_2"
-    type="revolute">
-    <origin
-      xyz="0.0383 0.040299991703033 0.2"
-      rpy="0 0 -1.5707963267949" />
-    <parent
-      link="Link_1" />
-    <child
-      link="Link_2" />
-    <axis
-      xyz="-1 0 0" />
-    <limit
-      lower="-1.57"
-      upper="1.57"
-      effort="0"
-      velocity="0" />
-  </joint>
-  <link
-    name="Link_3">
-    <inertial>
-      <origin
-        xyz="0.0850855601631643 0.00453029722345036 0.149501795627794"
-        rpy="0 0 0" />
-      <mass
-        value="1.65666298237921" />
-      <inertia
-        ixx="0.0077689359280993"
-        ixy="-3.83296066990403E-06"
-        ixz="-6.56645197735943E-06"
-        iyy="0.00737009929368985"
-        iyz="2.10121053224014E-06"
-        izz="0.00233759453730661" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://j2_prototype3_3/meshes/Link_3.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://j2_prototype3_3/meshes/Link_3.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="Limb_3"
-    type="revolute">
-    <origin
-      xyz="0.041577919602976 0.037603596411357 0.201058687851851"
-      rpy="0 0 -1.5707963267949" />
-    <parent
-      link="Link_2" />
-    <child
-      link="Link_3" />
-    <axis
-      xyz="-1 0 0" />
-    <limit
-      lower="-1.57"
-      upper="1.57"
-      effort="0"
-      velocity="0" />
-  </joint>
-  <link
-    name="Link_4">
-    <inertial>
-      <origin
-        xyz="0.0877819622259346 0.00580822512339147 0.150560483479637"
-        rpy="0 0 0" />
-      <mass
-        value="1.65666298237923" />
-      <inertia
-        ixx="0.00776893592809935"
-        ixy="-3.83296066989214E-06"
-        ixz="-6.56645197733123E-06"
-        iyy="0.00737009929368986"
-        iyz="2.10121053221037E-06"
-        izz="0.00233759453730665" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://j2_prototype3_3/meshes/Link_4.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://j2_prototype3_3/meshes/Link_4.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="Limb_4"
-    type="revolute">
-    <origin
-      xyz="0.037603596411366 0.039022070574184 0.198941312148156"
-      rpy="0 0 -1.5707963267949" />
-    <parent
-      link="Link_3" />
-    <child
-      link="Link_4" />
-    <axis
-      xyz="-1 0 0" />
-    <limit
-      lower="-1.57"
-      upper="1.57"
-      effort="0"
-      velocity="0" />
-  </joint>
-  <link
-    name="Link_5">
-    <inertial>
-      <origin
-        xyz="0.092387346244534 2.43122943960027E-12 -3.51507711826571E-12"
-        rpy="0 0 0" />
-      <mass
-        value="0.065637413377382" />
-      <inertia
-        ixx="7.05811091251407E-05"
-        ixy="-2.87901126860586E-18"
-        ixz="1.27280752998441E-17"
-        iyy="3.63181467498312E-05"
-        iyz="-8.56308997348221E-13"
-        izz="3.63181467549861E-05" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://j2_prototype3_3/meshes/Link_5.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://j2_prototype3_3/meshes/Link_5.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="Effector_Limb"
-    type="revolute">
-    <origin
-      xyz="0.040299998474171 0.038300000000004 0.199999999999992"
-      rpy="0 0 -1.5707963267949" />
-    <parent
-      link="Link_4" />
-    <child
-      link="Link_5" />
-    <axis
-      xyz="-1 0 0" />
-    <limit
-      lower="-3.14"
-      upper="3.14"
-      effort="0"
-      velocity="0" />
-  </joint>
+<robot name="j2_prototype3_3">
+    <link name="dummy" />
+    <link name="base_link">
+        
+<inertial>
+            <origin xyz="0.11384 -2.3403E-16 -0.12252" rpy="0 0 0" />
+            <mass value="2.0493" />
+            <inertia ixx="0.0053384" ixy="-1.1944E-18" ixz="-0.00016771" iyy="0.013602" iyz="6.7032E-18" izz="0.017691" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://j2_prototype3_3/meshes/base_link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.79216 0.81961 0.93333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://j2_prototype3_3/meshes/base_link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="dummy_joint" type="fixed">
+        <parent link="dummy" />
+        <child link="base_link" />
+    </joint>
+    <link name="Link_0">
+        
+<inertial>
+            <origin xyz="1.61827309052782E-05 -0.0123497742427197 0.117149116597007" rpy="0 0 0" />
+            <mass value="0.884810555483961" />
+            <inertia ixx="0.00158081710341373" ixy="1.65019256946575E-07" ixz="6.93858360117018E-07" iyy="0.00169495951809545" iyz="-3.6460561615554E-06" izz="0.00141716407449672" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://j2_prototype3_3/meshes/Link_0.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://j2_prototype3_3/meshes/Link_0.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="Base_Rotate" type="revolute">
+        <origin xyz="0.0483 0 -0.1263" rpy="0 0 -1.5708" />
+        <parent link="base_link" />
+        <child link="Link_0" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.14" upper="3.14" effort="0" velocity="0" />
+    </joint>
+    <link name="Link_1">
+        
+<inertial>
+            <origin xyz="0.0857819637518 0.00580822512338841 0.150560483479643" rpy="0 0 0" />
+            <mass value="1.65666298237923" />
+            <inertia ixx="0.00776893592809935" ixy="-3.83296066990928E-06" ixz="-6.56645197721605E-06" iyy="0.00737009929368987" iyz="2.10121053232552E-06" izz="0.00233759453730666" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://j2_prototype3_3/meshes/Link_1.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://j2_prototype3_3/meshes/Link_1.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="Limb_1" type="revolute">
+        <origin xyz="0 -0.0382999999999991 0.126300000762939" rpy="0 0 1.5707963267949" />
+        <parent link="Link_0" />
+        <child link="Link_1" />
+        <axis xyz="-1 0 0" />
+        <limit lower="-1.57" upper="1.57" effort="0" velocity="0" />
+    </joint>
+    <link name="Link_2">
+        
+<inertial>
+            <origin xyz="0.0877819571500387 0.00580822512338794 0.150560483479643" rpy="0 0 0" />
+            <mass value="1.65666298237922" />
+            <inertia ixx="0.00776893592809933" ixy="-3.83296066990485E-06" ixz="-6.56645197728899E-06" iyy="0.00737009929368986" iyz="2.1012105323528E-06" izz="0.00233759453730663" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://j2_prototype3_3/meshes/Link_2.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://j2_prototype3_3/meshes/Link_2.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="Limb_2" type="revolute">
+        <origin xyz="0.0383 0.040299991703033 0.2" rpy="0 0 -1.5707963267949" />
+        <parent link="Link_1" />
+        <child link="Link_2" />
+        <axis xyz="-1 0 0" />
+        <limit lower="-1.57" upper="1.57" effort="0" velocity="0" />
+    </joint>
+    <link name="Link_3">
+        
+<inertial>
+            <origin xyz="0.0850855601631643 0.00453029722345036 0.149501795627794" rpy="0 0 0" />
+            <mass value="1.65666298237921" />
+            <inertia ixx="0.0077689359280993" ixy="-3.83296066990403E-06" ixz="-6.56645197735943E-06" iyy="0.00737009929368985" iyz="2.10121053224014E-06" izz="0.00233759453730661" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://j2_prototype3_3/meshes/Link_3.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://j2_prototype3_3/meshes/Link_3.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="Limb_3" type="revolute">
+        <origin xyz="0.041577919602976 0.037603596411357 0.201058687851851" rpy="0 0 -1.5707963267949" />
+        <parent link="Link_2" />
+        <child link="Link_3" />
+        <axis xyz="-1 0 0" />
+        <limit lower="-1.57" upper="1.57" effort="0" velocity="0" />
+    </joint>
+    <link name="Link_4">
+        
+<inertial>
+            <origin xyz="0.0877819622259346 0.00580822512339147 0.150560483479637" rpy="0 0 0" />
+            <mass value="1.65666298237923" />
+            <inertia ixx="0.00776893592809935" ixy="-3.83296066989214E-06" ixz="-6.56645197733123E-06" iyy="0.00737009929368986" iyz="2.10121053221037E-06" izz="0.00233759453730665" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://j2_prototype3_3/meshes/Link_4.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://j2_prototype3_3/meshes/Link_4.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="Limb_4" type="revolute">
+        <origin xyz="0.037603596411366 0.039022070574184 0.198941312148156" rpy="0 0 -1.5707963267949" />
+        <parent link="Link_3" />
+        <child link="Link_4" />
+        <axis xyz="-1 0 0" />
+        <limit lower="-1.57" upper="1.57" effort="0" velocity="0" />
+    </joint>
+    <link name="Link_5">
+        
+<inertial>
+            <origin xyz="0.092387346244534 2.43122943960027E-12 -3.51507711826571E-12" rpy="0 0 0" />
+            <mass value="0.065637413377382" />
+            <inertia ixx="7.05811091251407E-05" ixy="-2.87901126860586E-18" ixz="1.27280752998441E-17" iyy="3.63181467498312E-05" iyz="-8.56308997348221E-13" izz="3.63181467549861E-05" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://j2_prototype3_3/meshes/Link_5.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://j2_prototype3_3/meshes/Link_5.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="Effector_Limb" type="revolute">
+        <origin xyz="0.040299998474171 0.038300000000004 0.199999999999992" rpy="0 0 -1.5707963267949" />
+        <parent link="Link_4" />
+        <child link="Link_5" />
+        <axis xyz="-1 0 0" />
+        <limit lower="-3.14" upper="3.14" effort="0" velocity="0" />
+    </joint>
+    
+<transmission name="trans_Base_Rotate">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="Base_Rotate">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Base_Rotate_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_Limb_1">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="Limb_1">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Limb_1_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_Limb_2">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="Limb_2">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Limb_2_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_Limb_3">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="Limb_3">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Limb_3_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_Limb_4">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="Limb_4">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Limb_4_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_Effector_Limb">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="Effector_Limb">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Effector_Limb_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/</robotNamespace>
+        </plugin>
+    </gazebo>
 </robot>
