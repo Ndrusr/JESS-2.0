@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: j2_prototype3_3
+    relative_path: urdf/j2_prototype3_3.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/j2_prototype3_3.srdf
+  CONFIG:
+    author_name: UnderscoreUser
+    author_email: tnwz99@gmail.com
+    generated_timestamp: 1620627263
