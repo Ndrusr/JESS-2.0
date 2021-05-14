@@ -1,0 +1,13 @@
+controller_list:
+  - name: fake_j2_arm_controller
+    type: $(arg execution_type)
+    joints:
+      - Base_Rotate
+      - Limb_1
+      - Limb_2
+      - Limb_3
+      - Limb_4
+      - Effector_Limb
+initial:  # Define initial robot poses.
+  - group: j2_arm
+    pose: Default
