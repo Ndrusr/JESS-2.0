@@ -28,7 +28,7 @@ To run RealSense Viewer:
 /opt/realsense/bin/realsense-viewer
 ```
 
-To visualize RealSense data on RVIZ:
+To visualize RealSense data on RVIZ:  
 In a terminal window:
 ```
 cd projects/ros/ws00/
