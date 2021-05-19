@@ -44,3 +44,8 @@ rosrun rviz rviz
 In RVIZ, under Displays, Global Options, change the Fixed Frame parameter, using the drop down menu, to 'camera_link'
 
 Click add & under /camera, /depth, /image_rect_raw, double click the DepthCloud option with the 'raw' parameter set in the drop down menu. And at long last, the depth cloud from the RealSense camera should be displayed.
+
+Another example that can be run:
+```
+roslaunch realsense2_camera demo_pointcloud.launch 
+```
