@@ -16,6 +16,7 @@ chmod +x realsense_ros_install.sh
 ./realsense_install.sh
 ./realsense_ros_install.sh
 ```
+Reboot.
 
 To uninstall:
 ```
