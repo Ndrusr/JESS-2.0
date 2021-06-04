@@ -7,6 +7,8 @@ The following instructions were tested to work on a LattePanda Alpha with 8Gb RA
 ## Part 0: Ubuntu 20.04
 
 ## Part 1: ROS Noetic
+Install catkin build.
+```sudo apt install python3-catkin-tools python3-osrf-pycommon```
 
 ## Part 2: MoveIt
 
