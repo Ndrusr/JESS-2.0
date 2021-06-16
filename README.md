@@ -1,7 +1,9 @@
 # JESS-2.0
-Jessica 2.0 is a 6-Axis robotic arm project by the SUTD Organization of Autonomous Robotics (SOAR).
+Adele is a 6-Axis robotic arm project by the SUTD Organization of Autonomous Robotics (SOAR).
 
 The following instructions were tested to work on a LattePanda Alpha with 8Gb RAM & a 250Gb Samsung 970 EVO NVMe M.2 SSD.
+
+Please ensure that you use the adele_urdf and adele_moveit_config packages, any packages bearing the name "jessica/j2/jess2" are depreciated and will be deleted eventually.
 
 # Installation
 ## Part 0: Ubuntu 20.04
