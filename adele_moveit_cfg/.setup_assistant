@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: adele_urdf_1
+    relative_path: urdf/adele_urdf_1.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/adele_urdf_1.srdf
+  CONFIG:
+    author_name: UnderscoreUser99
+    author_email: underscoreuser99@gmail.com
+    generated_timestamp: 1624502142
