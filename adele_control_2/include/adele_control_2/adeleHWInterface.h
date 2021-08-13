@@ -13,6 +13,7 @@
 #include <joint_limits_interface/joint_limits_interface.h>
 #include <joint_limits_interface/joint_limits_rosparam.h>
 #include <joint_limits_interface/joint_limits_urdf.h>
+#include <std_msgs/Float64.h>
 
 
 #include<transmission_interface/transmission_interface_loader.h>
@@ -33,6 +34,7 @@ public:
     }
 
     bool initializeHardware();
+    void setupListeners();
 
     void updateJointsFromHardware();
     void writeCommandsToHardware();
@@ -85,6 +87,9 @@ private:
 
     double homePose[6] = {0, 1.57, 1.57, 1.567, -1.57, 0};
 
+    template<std::size_t N> void readOutput(const std_msgs::Float64 msg);
+
+
 protected:
     std::string name_;
 
@@ -92,10 +97,13 @@ protected:
     ros::NodeHandle nh_;
     urdf::Model* urdf_model_;
 
+    ros::Publisher trajPublisher;
+
     // ros::Timer my_control_loop;
     ros::Duration elapsed_time;
     double loopHz;
     boost::shared_ptr<controller_manager::ControllerManager> controllerManager;
+    std::array<ros::Subscriber, 6> trajSub;
 };
 }
 #endif 
