@@ -2,6 +2,7 @@
 #include<ros/console.h>
 #include <rosparam_shortcuts/rosparam_shortcuts.h>
 #include<control_msgs/FollowJointTrajectoryAction.h>
+#include<trajectory_msgs/JointTrajectory.h>
 
 //This code has largely been repurposed from the ros_control_boilerplate generic_hw_interface script
 //LINK: https://github.com/PickNikRobotics/ros_control_boilerplate
@@ -33,7 +34,8 @@ AdeleHW::AdeleHW(const ros::NodeHandle& nh, urdf::Model* urdf_model):
     rosparam_shortcuts::shutdownIfError(name_, error);
 
     //ros::ServiceClient jntTraj = nh_.serviceClient<control_msgs::FollowJointTrajectoryAction>("followTraj");
-    ros::Publisher trajPublisher;
+    ros::Publisher trajPublisher = nh_.advertise<trajectory_msgs::JointTrajectoryPoint> ("AdeleHW/real_actuator_trajectory", 1000);
+
     
 }
 
@@ -138,7 +140,15 @@ void AdeleHW::reset()
 }
 */
 
-
+void AdeleHW::setupListeners(){
+    size_t num_joints = joint_names_.size();
+    std::string prefix = "AdeleHW/act";
+    std::string suffix = "State";
+    for(size_t count = 0; count != num_joints; count++){
+        std::string temp = prefix + std::to_string(count) + suffix;
+        //trajSub[count] = nh_.subscribe(temp, 1000,);
+    }
+}
 
 void AdeleHW::updateJointsFromHardware(){
     //TODO: provide script to read from MCU
@@ -148,6 +158,7 @@ void AdeleHW::updateJointsFromHardware(){
     for(size_t count = 0; count != num_joints; count++){
         posTmp = this->get<hardware_interface::JointStateInterface>()->getHandle(joint_names_[count]).getPosition();
         actuators[count].jointPos = posTmp;
+        
     }
 
 }
@@ -156,6 +167,7 @@ void AdeleHW::writeCommandsToHardware(){
     p_jnt_to_act_pos_->propagate();
     
     //TODO: provide script to write command
+    
 }
 
 void AdeleHW::read(ros::Time& time, ros::Duration& period){
@@ -169,12 +181,28 @@ void AdeleHW::write(ros::Time& time, ros::Duration& period){
 }
 
 void AdeleHW::read(ros::Duration& elapsed_time){
+    size_t num_joints = joint_names_.size();
     updateJointsFromHardware();
+    //trajPublisher.publish()
 }
 
 void AdeleHW::write(ros::Duration& elapsed_time){
     writeCommandsToHardware();
+    size_t num_joints = joint_names_.size();
+    double commandTmp = 0.0;
+
+    trajectory_msgs::JointTrajectoryPoint trajGoal;
+
+    for(size_t count = num_joints; count != -1; count -= 1){
+        commandTmp = actuators[count].command;
+        trajGoal.positions.push_back(commandTmp);
+        trajGoal.effort.push_back(actuators[count].effort);
+        trajGoal.velocities.push_back(actuators[count].velocity);
+        trajGoal.accelerations.push_back(0.0);
+    }
     
+
+    trajPublisher.publish(trajGoal);
 }
 /*
 void AdeleHW::update(const ros::TimerEvent& ev){
@@ -184,4 +212,8 @@ void AdeleHW::update(const ros::TimerEvent& ev){
     write(elapsed_time);
 }
 */
+template<std::size_t N> void AdeleHW::readOutput(const std_msgs::Float64 msg){
+    actuators[N].position = msg.data;
+}
+
 }
