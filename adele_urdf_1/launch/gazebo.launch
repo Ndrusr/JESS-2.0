@@ -17,4 +17,8 @@
     pkg="rostopic"
     type="rostopic"
     args="pub /calibrated std_msgs/Bool true" />
+  <param
+     name="robot_description"
+     textfile="$(find adele_urdf_1)/urdf/adele_urdf_1.urdf" />
+  <include file="$(find adele_urdf_1)/launch/arm_controllers.launch"/>
 </launch>
