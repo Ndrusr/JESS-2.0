@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <param name="robot_description"
+    textfile="$(find adele_urdf_1)/urdf/adele_urdf_1.urdf"></param>
+
+
+    <rosparam file = "$(find adele_control_2)/config/adele_controllers.yaml"
+    command="load"/>
+
+
+</launch>
