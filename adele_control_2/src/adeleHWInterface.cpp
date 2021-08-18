@@ -17,12 +17,16 @@ AdeleHW::AdeleHW(){
 AdeleHW::AdeleHW(const ros::NodeHandle& nh, urdf::Model* urdf_model):
     nh_(nh), urdf_model_(urdf_model), name_("adele_hw_interface")
 {
+    
+    
+
     if (urdf_model == NULL)
-        loadURDF(nh, "robot_description");
+        loadURDF(nh, "/robot_description");
     else
         urdf_model_ = urdf_model;
 
   // Load rosparams
+    
     ros::NodeHandle rpnh(
       nh_, name_);
 
@@ -33,11 +37,17 @@ AdeleHW::AdeleHW(const ros::NodeHandle& nh, urdf::Model* urdf_model):
     error += !rosparam_shortcuts::get(name_, rpnh, "joints", joint_names_);
     rosparam_shortcuts::shutdownIfError(name_, error);
 
+    directControl = true;
+
     //ros::ServiceClient jntTraj = nh_.serviceClient<control_msgs::FollowJointTrajectoryAction>("followTraj");
     ros::Publisher trajPublisher = nh_.advertise<trajectory_msgs::JointTrajectoryPoint> ("AdeleHW/real_actuator_trajectory", 1000);
 
     
 }
+
+AdeleHW::~AdeleHW() {
+    delete(urdf_model_);
+}  
 
 bool AdeleHW::loadTransmissions(){
         using namespace transmission_interface;
@@ -71,33 +81,35 @@ bool AdeleHW::loadTransmissions(){
             ROS_ERROR("Robot descripion couldn't be retrieved from param server.");
             return false;
         }
+        
 
   // Perform actual transmission loading
         if (!transmission_loader_->load(robot_description)) {return false;}
-
         ROS_INFO("Loaded transmissions from URDF");
 
   // Get the transmission interfaces
         act_to_jnt_state_ = transmissions_.get<ActuatorToJointStateInterface>();
         p_jnt_to_act_pos_ = transmissions_.get<JointToActuatorPositionInterface>();
+        return true;
+}
+
+
+void AdeleHW::registerActuatorInterfaces(){
+    std::size_t numActuators = sizeof(actuators);
+    using namespace hardware_interface;
+    for (std::size_t i = 0; i < numActuators; i++){
+        ActuatorStateHandle act_state_handle(actuator_names_[i], 
+            &actuators[i].position, &actuators[i].velocity, &actuators[i].effort);
+        actuators[i].stateHandle = act_state_handle;
+        actuators[i].handle = ActuatorHandle(actuators[i].stateHandle, &actuators[i].command);
+        act_state_interface_.registerHandle( actuators[i].stateHandle );
+        pos_act_interface_.registerHandle(actuators[i].handle);
     }
 
-    void AdeleHW::registerActuatorInterfaces(){
-        std::size_t numActuators = sizeof(actuators);
-        using namespace hardware_interface;
-        for (std::size_t i = 0; i < numActuators; i++){
-            ActuatorStateHandle act_state_handle(actuator_names_[i], 
-             &actuators[i].position, &actuators[i].velocity, &actuators[i].effort);
-            actuators[i].stateHandle = act_state_handle;
-            actuators[i].handle = ActuatorHandle(actuators[i].stateHandle, &actuators[i].command);
-            act_state_interface_.registerHandle( actuators[i].stateHandle );
-            pos_act_interface_.registerHandle(actuators[i].handle);
-        }
+    registerInterface(&act_state_interface_);
+    registerInterface(&pos_act_interface_);
 
-        registerInterface(&act_state_interface_);
-        registerInterface(&pos_act_interface_);
-
-    }
+}
 
 bool AdeleHW::initializeHardware(){
 // Register interfaces with the RobotHW interface manager, allowing ros_control operation
@@ -108,28 +120,38 @@ bool AdeleHW::initializeHardware(){
 }
 
 void AdeleHW::loadURDF(const ros::NodeHandle& nh, std::string param_name){
+    urdf_model_ = new urdf::Model();
+    bool loaded = false;
     std::string urdf_string;
-  urdf_model_ = new urdf::Model();
-
-  // search and wait for robot_description on param server
-  while (urdf_string.empty() && ros::ok())
-  {
+    // search and wait for robot_description on param server
+    while (urdf_string.empty() && ros::ok())
+    {
+    
     std::string search_param_name;
     if (nh.searchParam(param_name, search_param_name))
     {
-      ROS_INFO_STREAM_NAMED(name_, "Waiting for model URDF on the ROS param server at location: " << nh.getNamespace()
-                                                                                                  << search_param_name);
-      nh.getParam(search_param_name, urdf_string);
+        ROS_INFO_STREAM_NAMED(name_, "Parameter found. Waiting for model URDF on the ROS param server at location: " << nh.getNamespace()
+                                                                                                    << search_param_name);
+        //I DON'T GET IT, WHY IS THE F***ING PARAMETER SERVER RETURNING A NULLPTR WHEN A STRING IS CLEARLY STORED THERE
+        loaded = nh.getParam(search_param_name, urdf_string);
     }
     else
     {
-      ROS_INFO_STREAM_NAMED(name_, "Waiting for model URDF on the ROS param server at location: " << nh.getNamespace()
-                                                                                                  << param_name);
-      nh.getParam(param_name, urdf_string);
+        ROS_INFO_STREAM_NAMED(name_, "Waiting for model URDF on the ROS param server at location: " << nh.getNamespace()
+                                                                                                    << param_name);
+        loaded = nh.getParam(search_param_name, urdf_string);
+        
     }
-
+    
+    if(!loaded)
+        ROS_INFO_STREAM("Failed to get parameter, trying again...");
     usleep(100000);
 } //while
+
+    if (!urdf_model_->initString(urdf_string))
+        ROS_ERROR_STREAM_NAMED(name_, "Unable to load URDF model");
+    else
+        ROS_DEBUG_STREAM_NAMED(name_, "Received URDF from param server");
 
 } //loadURDF
 
@@ -204,6 +226,30 @@ void AdeleHW::write(ros::Duration& elapsed_time){
 
     trajPublisher.publish(trajGoal);
 }
+void AdeleHW::directCommandWrite(int linkNo, double commandValue){
+    if(directControl){
+        this->get<hardware_interface::JointCommandInterface>()->getHandle(joint_names_[linkNo]).setCommand(commandValue);
+    }    
+    else{
+        ROS_ERROR_STREAM("Direct Control has NOT been enabled!");
+    }
+}
+
+double AdeleHW::directCommandAccess(int linkNo){
+    if(directControl){
+        return actuators[linkNo].command;
+    }
+    else{
+        ROS_ERROR_STREAM("Direct Control has NOT been enabled!");
+        return 0;
+    }
+}
+
+bool AdeleHW::checkForConflict(...) const {
+    return false;
+}
+
+}
 /*
 void AdeleHW::update(const ros::TimerEvent& ev){
     elapsed_time = ros::Duration(ev.current_real-ev.last_real);
@@ -212,8 +258,3 @@ void AdeleHW::update(const ros::TimerEvent& ev){
     write(elapsed_time);
 }
 */
-template<std::size_t N> void AdeleHW::readOutput(const std_msgs::Float64 msg){
-    actuators[N].position = msg.data;
-}
-
-}
