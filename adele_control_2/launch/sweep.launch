@@ -1,0 +1,7 @@
+<launch>
+    <include file = "$(find adele_control_2)/launch/load_URDF.launch"/>
+    <node
+    name = "single_sweep"
+    pkg = "adele_control_2"
+    type = "sweepLimb" />
+</launch>
