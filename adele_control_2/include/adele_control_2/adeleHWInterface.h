@@ -29,9 +29,10 @@ namespace adele_control_2{
 class AdeleHW: public hardware_interface::RobotHW{
 public:
     AdeleHW();
-    AdeleHW(const ros::NodeHandle& nh, urdf::Model* urdf_model = NULL);
-    virtual ~AdeleHW(){
-    }
+    AdeleHW(const ros::NodeHandle& nh, urdf::Model* urdf_model);
+    ~AdeleHW();
+
+   
 
     bool initializeHardware();
     void setupListeners();
@@ -47,6 +48,8 @@ public:
     void write(ros::Time& time, ros::Duration& period);
     //void reset();
 
+    void directCommandWrite(int linkNo, double commandValue);
+    double directCommandAccess(int linkNo);
 
     virtual bool checkForConflict(...) const;
 
@@ -87,7 +90,7 @@ private:
 
     double homePose[6] = {0, 1.57, 1.57, 1.567, -1.57, 0};
 
-    template<std::size_t N> void readOutput(const std_msgs::Float64 msg);
+
 
 
 protected:
@@ -103,7 +106,8 @@ protected:
     ros::Duration elapsed_time;
     double loopHz;
     boost::shared_ptr<controller_manager::ControllerManager> controllerManager;
-    std::array<ros::Subscriber, 6> trajSub;
+    // std::array<ros::Subscriber, 6> trajSub;
+    bool directControl;
 };
 }
 #endif 
