@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+
+  
+ <group ns="AdeleHW">
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find adele_urdf_1)/config/adele_controllers.yaml" command="load"/>
+  <rosparam file="$(find adele_urdf_1)/config/gazebo_control.yaml" command="load"/>
+
+  <!-- Load the controllers -->
+ 
+   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="joint_state_controller
+    			   position_trajectory_controller
+    			   "/>
+ </group>
+
+</launch>
