@@ -29,20 +29,21 @@ AdeleHW::AdeleHW(const ros::NodeHandle& nh, urdf::Model* urdf_model):
     
     ros::NodeHandle rpnh(
       nh_, name_);
-
+    ROS_INFO_STREAM("Param access nodeHandle generated");
     controllerManager.reset(new controller_manager::ControllerManager(this, nh_));
     
     std::size_t error = 0;
     error += !rosparam_shortcuts::get(name_, rpnh, "actuators", actuator_names_);
     error += !rosparam_shortcuts::get(name_, rpnh, "joints", joint_names_);
     rosparam_shortcuts::shutdownIfError(name_, error);
+    ROS_INFO_STREAM("Actuator and joint params retrieved.");
 
     directControl = true;
 
     //ros::ServiceClient jntTraj = nh_.serviceClient<control_msgs::FollowJointTrajectoryAction>("followTraj");
     ros::Publisher trajPublisher = nh_.advertise<trajectory_msgs::JointTrajectoryPoint> ("AdeleHW/real_actuator_trajectory", 1000);
 
-    
+    ROS_INFO_STREAM("Constructor Success");
 }
 
 AdeleHW::~AdeleHW() {
@@ -51,10 +52,12 @@ AdeleHW::~AdeleHW() {
 
 bool AdeleHW::loadTransmissions(){
         using namespace transmission_interface;
+        ROS_INFO_STREAM("Transmission interface loading begin.");
   // Initialize transmission loader
         try
         {
             transmission_loader_.reset(new TransmissionInterfaceLoader(this, &transmissions_));
+            
         }
         catch(const std::invalid_argument& ex)
         {
@@ -71,58 +74,71 @@ bool AdeleHW::loadTransmissions(){
             ROS_ERROR_STREAM("Failed to create transmission interface loader. ");
             return false;
         } 
-
-  // Parse robot description
-        const std::string model_param_name = "robot_description";
-        bool res = nh_.hasParam(model_param_name);
-        std::string robot_description = ""; 
-        if (!res || !nh_.getParam(model_param_name, robot_description))
-        {
-            ROS_ERROR("Robot descripion couldn't be retrieved from param server.");
-            return false;
-        }
         
-
   // Perform actual transmission loading
-        if (!transmission_loader_->load(robot_description)) {return false;}
-        ROS_INFO("Loaded transmissions from URDF");
+        if (!transmission_loader_->load(urdf_string)) {return false;}
+        ROS_INFO_STREAM("Loaded transmissions from URDF");
 
   // Get the transmission interfaces
         act_to_jnt_state_ = transmissions_.get<ActuatorToJointStateInterface>();
         p_jnt_to_act_pos_ = transmissions_.get<JointToActuatorPositionInterface>();
+        ROS_INFO_STREAM("Transmission interfaces latched.");
         return true;
 }
 
 
 void AdeleHW::registerActuatorInterfaces(){
-    std::size_t numActuators = sizeof(actuators);
-    using namespace hardware_interface;
+    std::size_t numActuators = 6;
+    // ROS_INFO_STREAM("Attempting to register " << numActuators << " actuators:");
+    // for (std::size_t i = 0; i < numActuators; i++){
+    //     ROS_INFO_STREAM(actuator_names_[i] << " " << i);
+    // }
+    
     for (std::size_t i = 0; i < numActuators; i++){
-        ActuatorStateHandle act_state_handle(actuator_names_[i], 
+        ROS_INFO_STREAM("Starting registration of actuator "<< i );
+        hardware_interface::ActuatorStateHandle act_state_handle(actuator_names_[i], 
             &actuators[i].position, &actuators[i].velocity, &actuators[i].effort);
         actuators[i].stateHandle = act_state_handle;
-        actuators[i].handle = ActuatorHandle(actuators[i].stateHandle, &actuators[i].command);
+        ROS_INFO_STREAM("State handle registered for actuator "<< i );
+        actuators[i].handle = hardware_interface::ActuatorHandle(actuators[i].stateHandle, &actuators[i].command);
         act_state_interface_.registerHandle( actuators[i].stateHandle );
         pos_act_interface_.registerHandle(actuators[i].handle);
+        ROS_INFO_STREAM("Actuator "<< i <<"'s handles registered with interface.");
     }
 
-    registerInterface(&act_state_interface_);
-    registerInterface(&pos_act_interface_);
+    ROS_INFO_STREAM("All handles registered");
 
+    try{
+        registerInterface(&act_state_interface_);
+    }
+    catch(std::logic_error e){
+        ROS_ERROR_STREAM("Interface registration failed, cause: " << e.what());
+        ros::shutdown();
+    }
+    catch(...){
+        ROS_ERROR_STREAM("Not quite sure what went wrong, but interface registration failed");
+        ros::shutdown();
+    }
+    
+
+    ROS_INFO_STREAM("Actuator state interfaces registered.");
+    registerInterface(&pos_act_interface_);
+    ROS_INFO_STREAM("All interfaces registered.");
 }
 
 bool AdeleHW::initializeHardware(){
 // Register interfaces with the RobotHW interface manager, allowing ros_control operation
-  registerActuatorInterfaces();
-  // Load transmission information from URDF
-  if(!loadTransmissions()){return false;}
-  return true;
+    ROS_INFO_STREAM("Beginning Hardware Initialization");
+    registerActuatorInterfaces();
+    // Load transmission information from URDF
+    if(!loadTransmissions()){return false;}
+    return true;
 }
 
-void AdeleHW::loadURDF(const ros::NodeHandle& nh, std::string param_name){
+void AdeleHW::loadURDF(const ros::NodeHandle& nh, std::string param_name)
+{
     urdf_model_ = new urdf::Model();
-    bool loaded = false;
-    std::string urdf_string;
+    
     // search and wait for robot_description on param server
     while (urdf_string.empty() && ros::ok())
     {
@@ -132,26 +148,47 @@ void AdeleHW::loadURDF(const ros::NodeHandle& nh, std::string param_name){
     {
         ROS_INFO_STREAM_NAMED(name_, "Parameter found. Waiting for model URDF on the ROS param server at location: " << nh.getNamespace()
                                                                                                     << search_param_name);
-        //I DON'T GET IT, WHY IS THE F***ING PARAMETER SERVER RETURNING A NULLPTR WHEN A STRING IS CLEARLY STORED THERE
-        loaded = nh.getParam(search_param_name, urdf_string);
+        
+        try{
+            nh.getParam(search_param_name, urdf_string);
+        }
+        catch(std::logic_error e){
+            /* ROS_ERROR_STREAM(e.what());
+            ROS_INFO_STREAM("Extracted parameter: " << urdf_string); */
+        }
+        catch(...){
+            // ROS_ERROR_STREAM("Parameter Extraction failed.");
+        }
+        ROS_INFO_STREAM("xml string retrieved.");
     }
     else
     {
         ROS_INFO_STREAM_NAMED(name_, "Waiting for model URDF on the ROS param server at location: " << nh.getNamespace()
                                                                                                     << param_name);
-        loaded = nh.getParam(search_param_name, urdf_string);
+        
+        try{
+            nh.getParam(param_name, urdf_string);
+        }
+        catch(std::logic_error e){
+            ROS_ERROR_STREAM(e.what());
+            ROS_INFO_STREAM("Extracted parameter: " << urdf_string);
+        }
+        catch(...){
+            ROS_ERROR_STREAM("Parameter Extraction failed.");
+        }
         
     }
     
-    if(!loaded)
-        ROS_INFO_STREAM("Failed to get parameter, trying again...");
-    usleep(100000);
-} //while
 
+    usleep(100000);
+    
+} //while
+    
     if (!urdf_model_->initString(urdf_string))
         ROS_ERROR_STREAM_NAMED(name_, "Unable to load URDF model");
     else
         ROS_DEBUG_STREAM_NAMED(name_, "Received URDF from param server");
+    
 
 } //loadURDF
 
@@ -227,8 +264,12 @@ void AdeleHW::write(ros::Duration& elapsed_time){
     trajPublisher.publish(trajGoal);
 }
 void AdeleHW::directCommandWrite(int linkNo, double commandValue){
+    ROS_INFO_STREAM("Attempting to directly write value "<< commandValue <<" to joint " << joint_names_[linkNo]);
     if(directControl){
-        this->get<hardware_interface::JointCommandInterface>()->getHandle(joint_names_[linkNo]).setCommand(commandValue);
+        hardware_interface::JointHandle backdoorHandle;
+        backdoorHandle = this->get<hardware_interface::PositionJointInterface>()->getHandle(joint_names_[linkNo]);
+        ROS_INFO_STREAM("Latched handle");
+        backdoorHandle.setCommand(commandValue);
     }    
     else{
         ROS_ERROR_STREAM("Direct Control has NOT been enabled!");
