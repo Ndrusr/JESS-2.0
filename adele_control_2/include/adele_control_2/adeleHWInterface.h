@@ -98,6 +98,7 @@ protected:
 
     virtual void loadURDF(const ros::NodeHandle& nh, std::string param_name);
     ros::NodeHandle nh_;
+    std::string urdf_string;
     urdf::Model* urdf_model_;
 
     ros::Publisher trajPublisher;
